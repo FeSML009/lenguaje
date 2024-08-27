@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hangman Game</title>
+    <title>Ahorcado</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -53,9 +53,10 @@
 </head>
 <body>
 
-    <h1>Hangman Game</h1>
+    <h1>Ahorcado</h1>
+    <p>Lee los enunciados de conocimiento general y responde.</p>
     <img id="hangmanImage" src="images/hangman1.png" alt="Hangman" style="max-width: 300px; margin-bottom: 20px;">
-    <div id="question">Question: What is the capital of France?</div> <!-- Edit this to change the question -->
+    <div id="question">What is the capital of France?</div> <!-- Edit this to change the question -->
     <div id="wordDisplay">_ _ _ _ _ _</div> <!-- This will display the blanks and correct guesses -->
 
     <div id="letters"></div>
@@ -66,7 +67,7 @@
 
     <script>
         let questions = [
-            { question: "What is the capital of France?", answer: "PARIS" },
+            { question: "Ron DiFrancesco trabajaba en la planta 84 de la torre...", answer: "SUR" },
             { question: "What is the capital of Italy?", answer: "ROME" },
             { question: "What is the capital of Spain?", answer: "MADRID" },
             // Add more questions here
