@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangman Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        #question {
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+
+        #wordDisplay {
+            font-size: 2em;
+            letter-spacing: 10px;
+        }
+
+        .letter-button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 1.5em;
+            color: red;
+        }
+
+        #resetButton, #nextButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1em;
+            display: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Hangman Game</h1>
+    <img id="hangmanImage" src="images/hangman1.png" alt="Hangman" style="max-width: 300px; margin-bottom: 20px;">
+    <div id="question">Question: What is the capital of France?</div> <!-- Edit this to change the question -->
+    <div id="wordDisplay">_ _ _ _ _ _</div> <!-- This will display the blanks and correct guesses -->
+
+    <div id="letters"></div>
+
+    <div id="result"></div>
+    <button id="resetButton" onclick="resetGame()">Play Again</button>
+    <button id="nextButton" onclick="nextQuestion()">Next Question</button> <!-- New Next Question button -->
+
+    <script>
+        let questions = [
+            { question: "What is the capital of France?", answer: "PARIS" },
+            { question: "What is the capital of Italy?", answer: "ROME" },
+            { question: "What is the capital of Spain?", answer: "MADRID" },
+            // Add more questions here
+        ];
+        let currentQuestionIndex = 0;
+        let guessedLetters = [];
+        let wrongGuesses = 0;
+        const maxWrongGuesses = 5;
+
+        const wordDisplay = document.getElementById('wordDisplay');
+        const lettersDiv = document.getElementById('letters');
+        const resultDiv = document.getElementById('result');
+        const resetButton = document.getElementById('resetButton');
+        const nextButton = document.getElementById('nextButton');
+        const hangmanImage = document.getElementById('hangmanImage');
+        const questionDiv = document.getElementById('question');
+
+        function initGame() {
+            guessedLetters = [];
+            wrongGuesses = 0;
+            resultDiv.textContent = "";
+            resetButton.style.display = "none";
+            nextButton.style.display = "none";
+            hangmanImage.src = `images/hangman1.png`;
+            displayWord();
+            generateLetterButtons();
+            questionDiv.textContent = `Question: ${questions[currentQuestionIndex].question}`;
+        }
+
+        function displayWord() {
+            const answer = questions[currentQuestionIndex].answer.toUpperCase();
+            wordDisplay.textContent = answer.split('').map(letter => guessedLetters.includes(letter) ? letter : '_').join(' ');
+        }
+
+        function generateLetterButtons() {
+            lettersDiv.innerHTML = "";
+            for (let i = 65; i <= 90; i++) {
+                const letter = String.fromCharCode(i);
+                const button = document.createElement('button');
+                button.textContent = letter;
+                button.classList.add('letter-button');
+                button.onclick = () => guessLetter(letter);
+                lettersDiv.appendChild(button);
+            }
+        }
+
+        function guessLetter(letter) {
+            const answer = questions[currentQuestionIndex].answer.toUpperCase();
+            if (guessedLetters.includes(letter)) return;
+
+            guessedLetters.push(letter);
+            if (answer.includes(letter)) {
+                displayWord();
+                checkWin();
+            } else {
+                wrongGuesses++;
+                updateHangmanImage();
+                checkLose();
+            }
+        }
+
+        function updateHangmanImage() {
+            const imageNumber = Math.min(wrongGuesses + 1, maxWrongGuesses + 1);
+            hangmanImage.src = `images/hangman${imageNumber}.png`;
+        }
+
+        function checkWin() {
+            const answer = questions[currentQuestionIndex].answer.toUpperCase();
+            if (answer.split('').every(letter => guessedLetters.includes(letter))) {
+                resultDiv.textContent = "Congratulations! You've won!";
+                nextButton.style.display = "block";
+                endGame();
+            }
+        }
+
+        function checkLose() {
+            const answer = questions[currentQuestionIndex].answer.toUpperCase();
+            if (wrongGuesses >= maxWrongGuesses) {
+                resultDiv.textContent = `Sorry, you lost! The word was ${answer}.`;
+                resetButton.style.display = "block";
+                endGame();
+            }
+        }
+
+        function endGame() {
+            document.querySelectorAll('.letter-button').forEach(button => {
+                button.disabled = true;
+            });
+        }
+
+        function resetGame() {
+            initGame();
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
+            initGame();
+        }
+
+        initGame();
+    </script>
+
+</body>
+</html>
