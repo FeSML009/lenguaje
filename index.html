@@ -62,14 +62,15 @@
     <div id="letters"></div>
 
     <div id="result"></div>
-    <button id="resetButton" onclick="resetGame()">Play Again</button>
-    <button id="nextButton" onclick="nextQuestion()">Next Question</button> <!-- New Next Question button -->
+    <button id="resetButton" onclick="resetGame()">Intentarlo de nuevo</button>
+    <button id="nextButton" onclick="nextQuestion()">Siguiente pregunta</button> <!-- New Next Question button -->
 
     <script>
         let questions = [
-            { question: "Ron DiFrancesco trabajaba en la planta 84 de la torre...", answer: "SUR" },
-            { question: "What is the capital of Italy?", answer: "ROME" },
-            { question: "What is the capital of Spain?", answer: "MADRID" },
+            { question: "1. Ron DiFrancesco trabajaba en la planta 84 de la torre...", answer: "SUR" },
+            { question: "2. Famoso triángulo en el que han ocurrido accidentes de barcos y aviones.", answer: "TRIANGULODELASBERMUDAS" },
+            { question: "3. Una antigua ciudad en el mar.", answer: "ATLANTIS" },
+            { question: "inserte pregunta aqui", answer: "RESPUESTAAQUI" },
             // Add more questions here
         ];
         let currentQuestionIndex = 0;
@@ -94,7 +95,7 @@
             hangmanImage.src = `images/hangman1.png`;
             displayWord();
             generateLetterButtons();
-            questionDiv.textContent = `Question: ${questions[currentQuestionIndex].question}`;
+            questionDiv.textContent = `Enunciado ${questions[currentQuestionIndex].question}`;
         }
 
         function displayWord() {
@@ -137,7 +138,7 @@
         function checkWin() {
             const answer = questions[currentQuestionIndex].answer.toUpperCase();
             if (answer.split('').every(letter => guessedLetters.includes(letter))) {
-                resultDiv.textContent = "Congratulations! You've won!";
+                resultDiv.textContent = "¡Respuesta correcta!";
                 nextButton.style.display = "block";
                 endGame();
             }
@@ -146,7 +147,7 @@
         function checkLose() {
             const answer = questions[currentQuestionIndex].answer.toUpperCase();
             if (wrongGuesses >= maxWrongGuesses) {
-                resultDiv.textContent = `Sorry, you lost! The word was ${answer}.`;
+                resultDiv.textContent = `¡Han perdido! La respuesta era ${answer}.`;
                 resetButton.style.display = "block";
                 endGame();
             }
